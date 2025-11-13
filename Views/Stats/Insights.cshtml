@@ -1,0 +1,222 @@
+@{
+    ViewData["Title"] = "Ключевые наблюдения";
+    var insights = ViewBag.Insights as List<dynamic>;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>💡 Ключевые наблюдения</h2>
+    <div class="d-flex gap-2">
+        <a href="/stats" class="btn btn-outline-secondary">← Статистика</a>
+        <a href="/calendar" class="btn btn-outline-info">📅 Календарь</a>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="mb-0">📊 Ключевые наблюдения (автоматически сгенерированные)</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th style="width: 200px;">Тип инсайта</th>
+                        <th>Пример</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (insights?.Any() == true)
+                    {
+                        @foreach (var insight in insights)
+                        {
+                            <tr>
+                                <td><strong>@insight.Type</strong></td>
+                                <td>@insight.Text</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="2" class="text-center text-muted py-4">
+                                <div style="font-size: 48px;">🔍</div>
+                                <p class="mb-0">Недостаточно данных для анализа</p>
+                                <p class="small">Создайте больше заметок и целей, чтобы получить персональные инсайты</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Примеры типов инсайтов -->
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">ℹ️ Типы инсайтов</h5>
+    </div>
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="insight-type-card">
+                    <div class="insight-type-icon">📈</div>
+                    <h6>Тренд</h6>
+                    <p class="small text-muted mb-0">Выявление закономерностей в эмоциях по дням недели или периодам</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="insight-type-card">
+                    <div class="insight-type-icon">🔁</div>
+                    <h6>Повторение</h6>
+                    <p class="small text-muted mb-0">Анализ регулярности выполнения практик и активности</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="insight-type-card">
+                    <div class="insight-type-icon">⏰</div>
+                    <h6>Влияние времени</h6>
+                    <p class="small text-muted mb-0">Связь настроения и активности с временем суток</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="insight-type-card">
+                    <div class="insight-type-icon">🎯</div>
+                    <h6>Цель и поведение</h6>
+                    <p class="small text-muted mb-0">Влияние постановки целей на эмоциональное состояние</p>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="insight-type-card">
+                    <div class="insight-type-icon">⚠️</div>
+                    <h6>Отклонения</h6>
+                    <p class="small text-muted mb-0">Обнаружение резких изменений в активности или настроении</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recommendations -->
+<div class="card mt-4">
+    <div class="card-header">
+        <h5 class="mb-0">🎯 Рекомендации для улучшения</h5>
+    </div>
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="recommendation-card">
+                    <div class="recommendation-icon">📝</div>
+                    <h6>Регулярность записей</h6>
+                    <p class="small text-muted">Старайтесь записывать свои мысли каждый день. Это поможет лучше понимать свои эмоции.</p>
+                    <a href="/notes/create" class="btn btn-sm btn-outline-primary">Начать запись</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="recommendation-card">
+                    <div class="recommendation-icon">🎯</div>
+                    <h6>Ставьте цели</h6>
+                    <p class="small text-muted">Определите конкретные цели для улучшения своего эмоционального состояния.</p>
+                    <a href="/goals/create" class="btn btn-sm btn-outline-primary">Создать цель</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="recommendation-card">
+                    <div class="recommendation-icon">🧘</div>
+                    <h6>Практики медитации</h6>
+                    <p class="small text-muted">Изучите техники медитации для управления стрессом и улучшения настроения.</p>
+                    <a href="/practices" class="btn btn-sm btn-outline-primary">Изучить практики</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Mood Patterns -->
+<div class="card mt-4">
+    <div class="card-header">
+        <h5 class="mb-0">📊 Паттерны настроения</h5>
+    </div>
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <h6>🔍 Что анализируется:</h6>
+                <ul class="list-unstyled">
+                    <li>• Преобладающие эмоции</li>
+                    <li>• Частота записи заметок</li>
+                    <li>• Популярные активности</li>
+                    <li>• Прогресс по целям</li>
+                    <li>• Временные паттерны</li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <h6>💡 Как использовать инсайты:</h6>
+                <ul class="list-unstyled">
+                    <li>• Обратите внимание на повторяющиеся паттерны</li>
+                    <li>• Определите триггеры негативных эмоций</li>
+                    <li>• Найдите время для наиболее продуктивных активностей</li>
+                    <li>• Отслеживайте прогресс по целям</li>
+                    <li>• Используйте данные для планирования</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.recommendation-card {
+    text-align: center;
+    padding: 1.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.recommendation-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.recommendation-card h6 {
+    margin-bottom: 0.5rem;
+    color: #111827;
+}
+
+.recommendation-card p {
+    flex-grow: 1;
+    margin-bottom: 1rem;
+}
+
+.insight-type-card {
+    padding: 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    text-align: center;
+    height: 100%;
+}
+
+.insight-type-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.insight-type-card h6 {
+    margin-bottom: 0.5rem;
+    color: #111827;
+}
+
+.card {
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+</style>
