@@ -1,34 +1,43 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Sofia.Web.Models
 {
     public class Note
     {
+        [Key]
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Текст заметки обязателен")]
         [StringLength(2000, ErrorMessage = "Максимум 2000 символов")]
         public string Content { get; set; } = string.Empty;
 
+        [StringLength(500)]
         public string? Tags { get; set; }
 
+        [Required]
         public EmotionType Emotion { get; set; }
 
+        [StringLength(500)]
         public string? Activity { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+        [Required]
+        public DateTime Date { get; set; } = DateTime.Today;
 
-        public DateTime UpdatedAt { get; set; }  // новое поле для даты обновления
+        [Required]
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-        public DateTime Date { get; set; }
+        public DateTime? UpdatedAt { get; set; }
 
-        public bool IsPinned { get; set; }
+        public bool IsPinned { get; set; } = false;
 
-        public bool ShareWithPsychologist { get; set; }
+        public bool ShareWithPsychologist { get; set; } = false;
 
         // Связь с пользователем
-        public int? UserId { get; set; }
+        [ForeignKey("User")]
+        public int UserId { get; set; }
+
         public virtual User? User { get; set; }
     }
 
