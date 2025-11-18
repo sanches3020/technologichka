@@ -95,6 +95,10 @@ public class SofiaDbContext : DbContext
             .HasForeignKey(r => r.UserId)
             .OnDelete(DeleteBehavior.SetNull);
 
+        // --- SEEDING ---
+
+        var createdDate = DateTime.SpecifyKind(DateTime.Parse("2024-01-01T00:00:00"), DateTimeKind.Utc);
+
         // Seed: Practices
         modelBuilder.Entity<Practice>().HasData(
             new Practice { Id = 1, Name = "Дыхание 4-7-8", Description = "Техника успокоения через дыхание", Category = PracticeCategory.Breathing, DurationMinutes = 5, Instructions = "Вдох на 4 счета, задержка на 7, выдох на 8" },
@@ -111,19 +115,73 @@ public class SofiaDbContext : DbContext
             new Goal { Id = 3, Title = "Работа с тревогой", Description = "Применять техники КПТ при тревоге", Type = GoalType.Therapy, IsFromPsychologist = true, Progress = 25 }
         );
 
-        // Seed: Psychologists
-        // Note: Пароли для психологов должны быть установлены через регистрацию:
-        // psychologist1 / psychologist1
-        // psychologist2 / psychologist2  
-        // psychologist3 / psychologist3
-        var createdDate = new DateTime(2024, 01, 01);
+        //  Seed: Psychologists
+        modelBuilder.Entity<Psychologist>().HasData(
+            new Psychologist
+            {
+                Id = 1,
+                Name = "Ирина Смирнова",
+                IsActive = true,
+                CreatedAt = createdDate
+            },
+            new Psychologist
+            {
+                Id = 2,
+                Name = "Алексей Иванов",
+                IsActive = true,
+                CreatedAt = createdDate
+            },
+            new Psychologist
+            {
+                Id = 3,
+                Name = "Мария Коваль",
+                IsActive = true,
+                CreatedAt = createdDate
+            }
+        );
 
-        // Seed: Reviews
+        //  Seed: Reviews (фиксированные даты)
         modelBuilder.Entity<PsychologistReview>().HasData(
-            new PsychologistReview { Id = 1, PsychologistId = 1, Rating = 5, Comment = "Отличный специалист!", CreatedAt = new DateTime(2024, 01, 10) },
-            new PsychologistReview { Id = 2, PsychologistId = 1, Rating = 4, Comment = "Профессиональный подход", CreatedAt = new DateTime(2024, 01, 05) },
-            new PsychologistReview { Id = 3, PsychologistId = 2, Rating = 5, Comment = "Помог решить семейные проблемы", CreatedAt = new DateTime(2024, 01, 15) },
-            new PsychologistReview { Id = 4, PsychologistId = 3, Rating = 5, Comment = "EMDR терапия действительно работает", CreatedAt = new DateTime(2024, 01, 20) }
+            new PsychologistReview
+            {
+                Id = 1,
+                PsychologistId = 1,
+                Rating = 5,
+                Comment = "Отличный специалист!",
+                CreatedAt = DateTime.SpecifyKind(DateTime.Parse("2024-01-10T00:00:00"), DateTimeKind.Utc),
+                IsVisible = true,
+                IsApproved = true
+            },
+            new PsychologistReview
+            {
+                Id = 2,
+                PsychologistId = 1,
+                Rating = 4,
+                Comment = "Профессиональный подход",
+                CreatedAt = DateTime.SpecifyKind(DateTime.Parse("2024-01-05T00:00:00"), DateTimeKind.Utc),
+                IsVisible = true,
+                IsApproved = true
+            },
+            new PsychologistReview
+            {
+                Id = 3,
+                PsychologistId = 2,
+                Rating = 5,
+                Comment = "Помог решить семейные проблемы",
+                CreatedAt = DateTime.SpecifyKind(DateTime.Parse("2024-01-15T00:00:00"), DateTimeKind.Utc),
+                IsVisible = true,
+                IsApproved = true
+            },
+            new PsychologistReview
+            {
+                Id = 4,
+                PsychologistId = 3,
+                Rating = 5,
+                Comment = "EMDR терапия действительно работает",
+                CreatedAt = DateTime.SpecifyKind(DateTime.Parse("2024-01-20T00:00:00"), DateTimeKind.Utc),
+                IsVisible = true,
+                IsApproved = true
+            }
         );
     }
 }
