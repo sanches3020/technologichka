@@ -187,7 +187,7 @@ public class NotesController : Controller
 
         var userIdInt = int.Parse(userId);
         var today = DateTime.Today;
-
+                
         var todayNotes = await _context.Notes
             .CountAsync(n => n.UserId == userIdInt && n.Date.Date == today);
 
