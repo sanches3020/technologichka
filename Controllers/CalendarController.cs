@@ -61,7 +61,7 @@ public class CalendarController : Controller
     }
 
     [HttpPost("save-emotion")]
-    public async Task<IActionResult> SaveEmotion([FromBody] SaveEmotionRequest request)
+    public async Task<IActionResult> SaveEmotion([FromBody] SaveEmotionRequest? request)
     {
         var userId = HttpContext.Session.GetString("UserId");
         if (string.IsNullOrEmpty(userId))
@@ -69,8 +69,17 @@ public class CalendarController : Controller
             return Json(new { success = false, message = "Пользователь не авторизован" });
         }
 
+        if (request == null || string.IsNullOrEmpty(request.Date))
+        {
+            return Json(new { success = false, message = "Дата не указана" });
+        }
+
+        if (!DateTime.TryParse(request.Date, out var date))
+        {
+            return Json(new { success = false, message = "Неверный формат даты" });
+        }
+
         var userIdInt = int.Parse(userId);
-        var date = DateTime.Parse(request.Date);
 
         // Проверяем, сколько эмоций уже записано на этот день
         var existingEmotions = await _context.EmotionEntries
@@ -95,6 +104,7 @@ public class CalendarController : Controller
 
         return Json(new { success = true, message = "Эмоция сохранена!" });
     }
+
 
     [HttpGet("day-details")]
     public async Task<IActionResult> DayDetails(string date)
@@ -149,9 +159,3 @@ public class CalendarController : Controller
     }
 }
 
-public class SaveEmotionRequest
-{
-    public string Date { get; set; } = string.Empty;
-    public EmotionType Emotion { get; set; }
-    public string? Note { get; set; }
-}
