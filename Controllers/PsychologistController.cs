@@ -453,7 +453,7 @@ public class PsychologistController : Controller
     {
         var userId = HttpContext.Session.GetString("UserId");
         var userRole = HttpContext.Session.GetString("UserRole");
-        
+
         if (string.IsNullOrEmpty(userId) || userRole != "psychologist")
         {
             return RedirectToAction("Login", "Auth");
@@ -467,24 +467,32 @@ public class PsychologistController : Controller
             return NotFound();
         }
 
-        // Получаем расписание психолога
+        // Получаем расписание психолога (без сортировки в SQL)
         var schedules = await _context.PsychologistSchedules
             .Where(s => s.PsychologistId == psychologist.Id)
-            .OrderBy(s => s.DayOfWeek)
-            .ThenBy(s => s.StartTime)
             .ToListAsync();
 
-        // Получаем существующие слоты на ближайшие 2 недели
+        // Сортируем уже в памяти
+        schedules = schedules
+            .OrderBy(s => s.DayOfWeek)
+            .ThenBy(s => s.StartTime)
+            .ToList();
+
+        // Получаем существующие слоты на ближайшие 2 недели (без сортировки в SQL)
         var startDate = DateTime.Today;
         var endDate = startDate.AddDays(14);
-        
+
         var existingSlots = await _context.PsychologistTimeSlots
-            .Where(t => t.PsychologistId == psychologist.Id && 
-                       t.Date >= startDate && 
+            .Where(t => t.PsychologistId == psychologist.Id &&
+                       t.Date >= startDate &&
                        t.Date <= endDate)
+            .ToListAsync();
+
+        // Сортируем уже в памяти
+        existingSlots = existingSlots
             .OrderBy(t => t.Date)
             .ThenBy(t => t.StartTime)
-            .ToListAsync();
+            .ToList();
 
         ViewBag.Psychologist = psychologist;
         ViewBag.Schedules = schedules;
@@ -494,6 +502,7 @@ public class PsychologistController : Controller
 
         return View();
     }
+
 
     [HttpPost("schedule/add")]
     public async Task<IActionResult> AddSchedule(int dayOfWeek, TimeSpan startTime, TimeSpan endTime)
